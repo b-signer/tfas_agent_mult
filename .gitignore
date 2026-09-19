@@ -22,3 +22,6 @@ paper/*.blg
 paper/*.fls
 paper/*.fdb_latexmk
 paper/*.synctex.gz
+
+# Local tooling (tectonic binary)
+tools/
