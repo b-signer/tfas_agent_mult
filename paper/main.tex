@@ -70,8 +70,8 @@ roughly $6.3\times$ lower cost and $6.5\times$ lower mean latency than the
 reasoning-only baseline, for a 0.5 percentage-point accuracy cost (98.5\% vs.\
 99.0\%). We report the central trade-off honestly: memory couples correctness to
 the quality of the first-contact routing decision, so a confident early mistake
-propagates to every repeat. This is an exploratory undergraduate white paper; we
-draw modest conclusions and outline where the design should be pushed next.
+propagates to every repeat. This is an exploratory personal project; we draw
+modest conclusions and outline where the design should be pushed next.
 \end{abstract}
 
 % ===========================================================================
@@ -447,7 +447,7 @@ alone matched a reasoning-only baseline at 43\% of its cost, and adding memory
 made the full agent roughly $6.3\times$ cheaper and $6.5\times$ faster for a
 half-point accuracy cost. The same mechanism that delivers those savings---memory
 replaying the first decision---also caps accuracy at the quality of first-contact
-routing. For an exploratory undergraduate project the takeaway is modest but
+routing. For an exploratory personal project the takeaway is modest but
 clear: a small model, given explicit permission to defer, plus a simple memory,
 recovers most of a large model's accuracy at a small fraction of its cost, and
 the interesting engineering lies in making that first routing decision good.
