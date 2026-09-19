@@ -94,12 +94,53 @@ S1_MAX_TOKENS = 512
 
 # System 2 is a reasoning model and needs headroom for chain-of-thought.
 S2_TEMPERATURE = 0.0
-S2_MAX_TOKENS = 8000
+S2_MAX_TOKENS = 6000
+# Prefer the fastest available provider for the reasoning model. Calibration
+# showed this cuts DeepSeek-R1 latency ~4x (126s -> ~13-31s per problem).
+S2_PROVIDER = {"sort": "throughput"}
 
 # HTTP behaviour
 REQUEST_TIMEOUT_S = 180
 MAX_RETRIES = 4
 RETRY_BACKOFF_S = 2.0
+
+# Concurrency for stateless experiment configs. The memory-enabled hybrid run is
+# always executed sequentially (in stream order) so cache write-backs are visible
+# to later repeats; the other three configs have no cross-problem state.
+DEFAULT_WORKERS = 8
+
+# --------------------------------------------------------------------------- #
+# Dataset defaults (see tfas.dataset)
+# --------------------------------------------------------------------------- #
+DATASET_SEED = 0
+N_STREAM = 200          # total problems presented (with repeats)
+N_UNIQUE_EASY = 45      # distinct easy problems in the pool
+N_UNIQUE_HARD = 35      # distinct hard problems in the pool
+REPEAT_FRACTION = 0.6   # target fraction of the stream that are repeats
+
+# --------------------------------------------------------------------------- #
+# Prompts (finalized from calibration)
+# --------------------------------------------------------------------------- #
+# Confidence-framed self-assessment: System 1 answers what it is sure of and
+# escalates the rest. Calibration: answers 6x7 and 12x8, escalates 23x47 and
+# 384x279 -- the intended fast/slow split via genuine self-assessment.
+S1_SYSTEM_PROMPT = (
+    "You are System 1: fast, intuitive arithmetic - the instant, effortless kind of "
+    "thinking. You are given a multiplication problem. Call answer(result) ONLY if you "
+    "are highly confident the result is exactly correct from memory or quick intuition. "
+    "If the problem would require careful, deliberate, multi-step calculation, call "
+    "escalate() instead of guessing. It is much better to escalate than to give a wrong "
+    "answer. Always respond with exactly one tool call."
+)
+# Forced-answer variant for the pure-System-1 baseline (no escalation tool).
+S1_FORCED_SYSTEM_PROMPT = (
+    "You are a fast mental-arithmetic assistant. Multiply the two numbers and call "
+    "answer(result) with the exact integer product. Always respond with one tool call."
+)
+S2_SYSTEM_PROMPT = (
+    "Solve the multiplication problem. Reason step by step as carefully as needed, then "
+    "end your reply with a line in exactly this format:\nANSWER: <integer>"
+)
 
 
 @dataclass
