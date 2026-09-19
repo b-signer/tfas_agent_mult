@@ -31,6 +31,30 @@ We report accuracy (overall and by difficulty), latency, token usage, dollar cos
 how often System 2 was invoked, and the memory hit rate. Results are written up as
 a LaTeX white paper in `paper/`.
 
+## Results (200-problem run)
+
+| Config | Accuracy (easy / hard) | Mean latency | Tokens | Cost | → System 2 | Memory hits |
+|---|---|---|---|---|---|---|
+| `pure_system1` | 92.0% (100% / 81.0%) | 0.53 s | 26 K | $0.0026 | 0 | — |
+| `pure_system2` | 99.0% (100% / 97.6%) | 24.1 s | 238 K | $0.5282 | 200 (100%) | — |
+| `hybrid_no_memory` | 99.5% (100% / 98.8%) | 9.4 s | 153 K | $0.2272 | 31 (15.5%) | — |
+| **`hybrid` (full TFaS)** | **98.5%** (100% / 96.4%) | **3.7 s** | **58 K** | **$0.0835** | 12 (6%) | 60% |
+
+Takeaways:
+
+- **Routing works.** With no memory, System 1 escalates only 15.5% of problems yet
+  the hybrid matches pure-System-2 accuracy (99.5% vs 99.0%) at 43% of the cost.
+- **Memory is the multiplier.** The full agent serves 60% of the stream from cache
+  for free, escalates just 6%, and lands at **$0.0835 — 6.3× cheaper than
+  pure-System-2, 24% of its tokens, and 6.5× lower mean latency** — for a
+  0.5-point accuracy cost.
+- **Memory is double-edged.** The full hybrid (98.5%) trails `hybrid_no_memory`
+  (99.5%) because the cache locks in System 1's *first-occurrence* answer: a
+  confidently-wrong first answer propagates to every repeat and forgoes a later
+  chance to escalate.
+
+See `paper/main.pdf` for the full write-up and `figures/` for the plots.
+
 ## Quick start
 
 ```bash

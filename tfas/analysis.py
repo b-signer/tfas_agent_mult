@@ -210,12 +210,15 @@ def _to_latex(df: pd.DataFrame) -> str:
         cells = [_latex_escape(str(name))] + [_fmt_cell(c, row[c]) for c in cols]
         body.append(" & ".join(cells) + r" \\")
     lines = [
-        "% Requires \\usepackage{booktabs} in the document preamble.",
+        "% Requires \\usepackage{booktabs} and \\usepackage{graphicx} in the document preamble.",
         r"\begin{table}[t]",
         r"  \centering",
         r"  \caption{Per-configuration accuracy, latency, token and cost summary for the "
         r"Thinking-Fast-and-Slow multiplication agent.}",
         r"  \label{tab:summary}",
+        # The full table has many columns; scale it to the text width so it never
+        # overflows the page (readable on a landscape page in the appendix).
+        r"  \resizebox{\textwidth}{!}{%",
         rf"  \begin{{tabular}}{{{colspec}}}",
         r"    \toprule",
         "    " + header,
@@ -223,6 +226,7 @@ def _to_latex(df: pd.DataFrame) -> str:
         *["    " + b for b in body],
         r"    \bottomrule",
         r"  \end{tabular}",
+        r"  }",
         r"\end{table}",
         "",
     ]
