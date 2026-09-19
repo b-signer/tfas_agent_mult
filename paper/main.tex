@@ -43,8 +43,9 @@
 
 \title{\textbf{Thinking, Fast and Slow for Arithmetic:\\
 A Dual-Model Agent with Memory for Elementary Multiplication}}
-\author{Benny Signer\\
-\small Undergraduate, Computer Science}
+\author{Benjamin Signer\\
+\small Undergraduate, Computer Science\\
+\small University of California, San Diego}
 \date{September 2026}
 
 \begin{document}
@@ -237,14 +238,14 @@ and should be read alongside total latency instead.
 \label{sec:results}
 
 Table~\ref{tab:main} summarizes the four configurations on the curated metrics
-that matter most; the complete auto-generated table with all columns appears in
+that matter most; the complete table with every recorded metric appears in
 Appendix~\ref{app:fulltable} (Table~\ref{tab:summary}).
 
 \begin{table}[H]
   \centering
   \caption{Main results: accuracy (overall / easy / hard), mean per-problem
   latency, total tokens, cost, escalation rate, and memory hit rate for each
-  configuration over the 200-problem stream. The full 15-column table is in
+  configuration over the 200-problem stream. The complete set of metrics is in
   Appendix~\ref{app:fulltable}.}
   \label{tab:main}
   \begin{tabular}{lrrrrrrr}
@@ -452,6 +453,13 @@ recovers most of a large model's accuracy at a small fraction of its cost, and
 the interesting engineering lies in making that first routing decision good.
 
 % ===========================================================================
+\section*{Acknowledgments}
+The experiments and this paper were carried out with the assistance of Anthropic's
+Claude Opus~4.8, which helped implement the agent and experiment harness, run the
+evaluation, and draft the manuscript. The author designed the study, directed the
+work, verified the results, and is responsible for all content.
+
+% ===========================================================================
 \bibliography{refs}
 
 % ===========================================================================
@@ -459,16 +467,11 @@ the interesting engineering lies in making that first routing decision good.
 \section{Full Results Table}
 \label{app:fulltable}
 
-Table~\ref{tab:summary} reproduces the complete auto-generated summary with all
-recorded columns, rendered on a landscape page to fit its width.
+Table~\ref{tab:summary} reports the complete set of recorded metrics for all four
+configurations, laid out with metrics as rows so that every value is legible on a
+normal page.
 
-\begin{landscape}
-\begingroup
-\footnotesize
-\setlength{\tabcolsep}{3.5pt}
-\input{../results/summary_table.tex}
-\endgroup
-\end{landscape}
+\input{../results/summary_table_transposed.tex}
 
 \section{Reproducibility}
 \label{app:repro}

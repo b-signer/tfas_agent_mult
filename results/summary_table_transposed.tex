@@ -1,0 +1,31 @@
+% Requires \usepackage{booktabs} in the document preamble.
+\begin{table}[t]
+  \centering
+  \caption{Full per-configuration results across all recorded metrics. Configurations: Pure S1/S2 use only System~1 / System~2; Hybrid (no mem) is routing without memory; Hybrid (mem) is the full TFaS agent.}
+  \label{tab:summary}
+  \begin{tabular}{lrrrr}
+    \toprule
+    \textbf{Metric} & \textbf{Pure S1} & \textbf{Pure S2} & \textbf{Hybrid (no mem)} & \textbf{Hybrid (mem)} \\
+    \midrule
+    Accuracy (overall) & 0.920 & 0.990 & 0.995 & 0.985 \\
+    Accuracy (easy) & 1.000 & 1.000 & 1.000 & 1.000 \\
+    Accuracy (hard) & 0.810 & 0.976 & 0.988 & 0.964 \\
+    \addlinespace
+    Problems ($n$) & 200 & 200 & 200 & 200 \\
+    \quad easy & 116 & 116 & 116 & 116 \\
+    \quad hard & 84 & 84 & 84 & 84 \\
+    \addlinespace
+    Mean latency (s) & 0.53 & 24.14 & 9.39 & 3.74 \\
+    Total latency (s) & 105.25 & 4828.68 & 1878.78 & 747.13 \\
+    Wall-clock (s) & 9.69 & 440.20 & 201.79 & 747.15 \\
+    \addlinespace
+    Total tokens & 26,113 & 237,570 & 152,579 & 57,644 \\
+    Total cost (USD) & 0.0026 & 0.5282 & 0.2272 & 0.0835 \\
+    \addlinespace
+    Memory hit rate & 0.000 & 0.000 & 0.000 & 0.600 \\
+    Escalation rate & 0.000 & 1.000 & 0.155 & 0.060 \\
+    System~2 calls & 0 & 200 & 31 & 12 \\
+    Errors & 0 & 0 & 0 & 0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}

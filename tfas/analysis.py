@@ -233,6 +233,87 @@ def _to_latex(df: pd.DataFrame) -> str:
     return "\n".join(lines)
 
 
+# Human-readable labels for the transposed (portrait) appendix table.
+_CONFIG_LABELS = {
+    "pure_system1": "Pure S1",
+    "pure_system2": "Pure S2",
+    "hybrid_no_memory": "Hybrid (no mem)",
+    "hybrid": "Hybrid (mem)",
+}
+# (column key, row label, format kind, group id) for the transposed table.
+_METRIC_ROWS = [
+    ("accuracy",        r"Accuracy (overall)", "f3",   0),
+    ("accuracy_easy",   r"Accuracy (easy)",    "f3",   0),
+    ("accuracy_hard",   r"Accuracy (hard)",    "f3",   0),
+    ("n",               r"Problems ($n$)",     "int",  1),
+    ("n_easy",          r"\quad easy",         "int",  1),
+    ("n_hard",          r"\quad hard",         "int",  1),
+    ("mean_latency_s",  r"Mean latency (s)",   "f2",   2),
+    ("total_latency_s", r"Total latency (s)",  "f2",   2),
+    ("wall_clock_s",    r"Wall-clock (s)",     "f2",   2),
+    ("total_tokens",    r"Total tokens",       "intc", 3),
+    ("total_cost_usd",  r"Total cost (USD)",   "f4",   3),
+    ("memory_hit_rate", r"Memory hit rate",    "f3",   4),
+    ("escalation_rate", r"Escalation rate",    "f3",   4),
+    ("n_system2_calls", r"System~2 calls",     "int",  4),
+    ("n_errors",        r"Errors",             "int",  4),
+]
+
+
+def _fmt_val(kind: str, value) -> str:
+    """Format one value for the transposed table by declared kind."""
+    if pd.isna(value):
+        return "--"
+    if kind == "f2":
+        return f"{value:.2f}"
+    if kind == "f3":
+        return f"{value:.3f}"
+    if kind == "f4":
+        return f"{value:.4f}"
+    if kind == "intc":
+        return f"{int(round(value)):,}"
+    return f"{int(round(value))}"
+
+
+def _to_latex_transposed(df: pd.DataFrame) -> str:
+    """Portrait, readable appendix table: metrics as rows, configs as columns.
+
+    Unlike the wide auto-generated table, this fits a normal page without scaling.
+    """
+    order = [c for c in _CONFIG_LABELS if c in df.index]
+    headers = [_CONFIG_LABELS[c] for c in order]
+    ncol = len(order)
+    lines = [
+        "% Requires \\usepackage{booktabs} in the document preamble.",
+        r"\begin{table}[t]",
+        r"  \centering",
+        r"  \caption{Full per-configuration results across all recorded metrics. "
+        r"Configurations: Pure S1/S2 use only System~1 / System~2; Hybrid (no mem) "
+        r"is routing without memory; Hybrid (mem) is the full TFaS agent.}",
+        r"  \label{tab:summary}",
+        rf"  \begin{{tabular}}{{l{'r' * ncol}}}",
+        r"    \toprule",
+        "    " + " & ".join([r"\textbf{Metric}"] + [rf"\textbf{{{h}}}" for h in headers]) + r" \\",
+        r"    \midrule",
+    ]
+    prev_group = None
+    for key, label, kind, group in _METRIC_ROWS:
+        if key not in df.columns:
+            continue
+        if prev_group is not None and group != prev_group:
+            lines.append(r"    \addlinespace")
+        cells = [label] + [_fmt_val(kind, df.at[cfg, key]) for cfg in order]
+        lines.append("    " + " & ".join(cells) + r" \\")
+        prev_group = group
+    lines += [
+        r"    \bottomrule",
+        r"  \end{tabular}",
+        r"\end{table}",
+        "",
+    ]
+    return "\n".join(lines)
+
+
 def save_summary(df: pd.DataFrame, results_dir: PathLike = config.RESULTS_DIR) -> dict[str, Path]:
     """Write ``summary.csv``, ``summary.md`` and ``summary_table.tex``.
 
@@ -246,6 +327,7 @@ def save_summary(df: pd.DataFrame, results_dir: PathLike = config.RESULTS_DIR) -
     csv_path = results_dir / "summary.csv"
     md_path = results_dir / "summary.md"
     tex_path = results_dir / "summary_table.tex"
+    tex_t_path = results_dir / "summary_table_transposed.tex"
 
     rounded.to_csv(csv_path)
     try:
@@ -256,8 +338,10 @@ def save_summary(df: pd.DataFrame, results_dir: PathLike = config.RESULTS_DIR) -
         md = tabulate(rounded, headers="keys", tablefmt="github")
     md_path.write_text(md + "\n", encoding="utf-8")
     tex_path.write_text(_to_latex(rounded), encoding="utf-8")
+    # Portrait, readable version used in the paper's appendix (metrics as rows).
+    tex_t_path.write_text(_to_latex_transposed(df), encoding="utf-8")
 
-    return {"csv": csv_path, "md": md_path, "tex": tex_path}
+    return {"csv": csv_path, "md": md_path, "tex": tex_path, "tex_transposed": tex_t_path}
 
 
 # --------------------------------------------------------------------------- #
