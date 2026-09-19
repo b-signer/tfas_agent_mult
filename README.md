@@ -86,3 +86,7 @@ docs/        module interface contract
 - The code reads the API key from `OPENROUTER_KEY` (or `OPENROUTER_API_KEY`) in the
   environment or in `.env`. `.env` is gitignored.
 - A full run costs roughly a few US dollars in OpenRouter credits.
+
+## License
+
+Released under the [MIT License](LICENSE) — © 2026 Benjamin Signer.
