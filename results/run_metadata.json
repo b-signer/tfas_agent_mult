@@ -1,0 +1,49 @@
+{
+  "timestamp_utc": "2026-09-19T07:47:19.419572+00:00",
+  "n_problems": 200,
+  "workers": 12,
+  "system1_model": "mistralai/ministral-3b-2512",
+  "system2_model": "deepseek/deepseek-r1-0528",
+  "configs": {
+    "pure_system1": {
+      "mode": "s1_only",
+      "use_memory": false,
+      "wall_clock_s": 9.68636665699978,
+      "n": 200,
+      "n_correct": 184,
+      "n_errors": 0,
+      "total_cost_usd": 0.0026113,
+      "total_tokens": 26113
+    },
+    "pure_system2": {
+      "mode": "s2_only",
+      "use_memory": false,
+      "wall_clock_s": 440.20495076299994,
+      "n": 200,
+      "n_correct": 198,
+      "n_errors": 0,
+      "total_cost_usd": 0.528210159,
+      "total_tokens": 237570
+    },
+    "hybrid_no_memory": {
+      "mode": "hybrid",
+      "use_memory": false,
+      "wall_clock_s": 201.78708110499974,
+      "n": 200,
+      "n_correct": 199,
+      "n_errors": 0,
+      "total_cost_usd": 0.227163826,
+      "total_tokens": 152579
+    },
+    "hybrid": {
+      "mode": "hybrid",
+      "use_memory": true,
+      "wall_clock_s": 747.1489002059998,
+      "n": 200,
+      "n_correct": 197,
+      "n_errors": 0,
+      "total_cost_usd": 0.083467816,
+      "total_tokens": 57644
+    }
+  }
+}

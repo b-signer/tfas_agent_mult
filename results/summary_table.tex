@@ -1,0 +1,16 @@
+% Requires \usepackage{booktabs} in the document preamble.
+\begin{table}[t]
+  \centering
+  \caption{Per-configuration accuracy, latency, token and cost summary for the Thinking-Fast-and-Slow multiplication agent.}
+  \label{tab:summary}
+  \begin{tabular}{lrrrrrrrrrrrrrrr}
+    \toprule
+    \textbf{config} & \textbf{accuracy} & \textbf{accuracy\_easy} & \textbf{accuracy\_hard} & \textbf{n} & \textbf{n\_easy} & \textbf{n\_hard} & \textbf{mean\_latency\_s} & \textbf{total\_latency\_s} & \textbf{wall\_clock\_s} & \textbf{total\_tokens} & \textbf{total\_cost\_usd} & \textbf{memory\_hit\_rate} & \textbf{escalation\_rate} & \textbf{n\_system2\_calls} & \textbf{n\_errors} \\
+    \midrule
+    pure\_system1 & 0.920 & 1.000 & 0.810 & 200 & 116 & 84 & 0.53 & 105.25 & 9.69 & 26,113 & 0.0026 & 0.000 & 0.000 & 0 & 0 \\
+    pure\_system2 & 0.990 & 1.000 & 0.976 & 200 & 116 & 84 & 24.14 & 4828.68 & 440.20 & 237,570 & 0.5282 & 0.000 & 1.000 & 200 & 0 \\
+    hybrid\_no\_memory & 0.995 & 1.000 & 0.988 & 200 & 116 & 84 & 9.39 & 1878.78 & 201.79 & 152,579 & 0.2272 & 0.000 & 0.155 & 31 & 0 \\
+    hybrid & 0.985 & 1.000 & 0.964 & 200 & 116 & 84 & 3.74 & 747.13 & 747.15 & 57,644 & 0.0835 & 0.600 & 0.060 & 12 & 0 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
